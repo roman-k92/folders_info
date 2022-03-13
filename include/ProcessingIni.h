@@ -9,11 +9,11 @@ class ProcessingIniFile
 {
     private:
         boost::property_tree::ptree pt;
-        std::string m_iniFileName;
+        const std::string m_iniFileName;
         
 
     public:
-        void ReadIniFile();
+        std::vector<std::string> ReadIniFile();
         ProcessingIniFile();
 
     

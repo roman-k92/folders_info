@@ -5,7 +5,6 @@
 
 int main()
 {
-    
     while(true)
     {
         int inputNum;
@@ -17,26 +16,43 @@ int main()
 
         if (inputNum == 1)
         {
-            std::cout << "read ini" << std::endl;
-
             ProcessingIniFile *obj = new ProcessingIniFile();
-            obj->ReadIniFile();
+            std::vector<std::string> pathStorage = obj->ReadIniFile();
+
+            std::vector<std::string>::iterator iter = pathStorage.begin();
+            while(iter != pathStorage.end()) 
+            {
+                std::cout << "Returned path " << *iter++ << std::endl;
+            }
+            
             delete obj;
-            //sleep(1);
-            break;
         }
         else if (inputNum == 2)
         {
             std::cout << "get files info" << std::endl;
-            std::cout << "press Enter to skip" << std::endl;
+            std::cout << "type 'c' and press Enter to skip" << std::endl;
+            std::cout << "type 'd' and press Enter to set default path (current folder)" << std::endl;
 
             boost::filesystem::path inPath;
             std::cin >> inPath;
 
-            FileFinder *obj = new FileFinder(inPath);
+            FileFinder *obj;
+
+            if (inPath == "c")
+            {
+                continue;
+            }
+            else if (inPath == "d")
+            {
+                obj = new FileFinder();
+            }
+            else
+            {
+                obj = new FileFinder(inPath);
+            }
+
             obj->ReadAllFiles();
-            delete obj;
-            break;
+            delete obj;            
         }
         else
         {
@@ -50,24 +66,3 @@ int main()
 
     return 0;
 }
-
-/*#include <iostream>
-#include <boost/property_tree/ptree.hpp>
-//#include <boost/property_tree/ini_parser.hpp>
-#include <boost/filesystem.hpp>
-
-using namespace std;
-int main()
-{
-    boost::property_tree::ptree pt;
-    //boost::property_tree::ini_parser::read_ini("config.ini", pt);
-
-    if (!boost::filesystem::exists("config.ini"))
-    {
-        std::cout << "Can't" << std::endl;
-    }        
-    //std::cout << pt.get<std::string>("Section1.Value1") << std::endl;
-    //std::cout << pt.get<std::string>("Section1.Value2") << std::endl;
-
-    return 0;
-}*/
