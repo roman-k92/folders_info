@@ -18,5 +18,5 @@ Writer::~Writer()
 
 void Writer::Write(std::string line)
 {
-    m_Outfile << "\"" << line << "\"" << std::endl;
+    m_Outfile << line << std::endl;
 }

@@ -1,10 +1,13 @@
 #include <iostream>
 #include <unistd.h>
+#include <boost/thread.hpp>
 #include "../include/ProcessingIni.h"
 #include "../include/FileFinder.h"
+#include "../include/CommandsAnalyser.h"
 
 int main()
-{
+{    
+    FileFinder *obj;
     while(true)
     {
         int inputNum;
@@ -30,39 +33,52 @@ int main()
         else if (inputNum == 2)
         {
             std::cout << "get files info" << std::endl;
-            std::cout << "type 'c' and press Enter to skip" << std::endl;
-            std::cout << "type 'd' and press Enter to set default path (current folder)" << std::endl;
+            std::cout << "type '-s' and press Enter to skip" << std::endl;
+            std::cout << "type '-d' and press Enter to set default path (current folder)" << std::endl;
+            std::cout << "type '-t' and press Enter to run terminal commads" << std::endl;
+            std::cout << "type folder_path and press Enter to set path" << std::endl;
 
             boost::filesystem::path inPath;
             std::cin >> inPath;
 
-            FileFinder *obj;
-
-            if (inPath == "c")
+            if (inPath == "-s")
             {
                 continue;
             }
-            else if (inPath == "d")
+            else if (inPath == "-d")
             {
                 obj = new FileFinder();
             }
-            else
+            else if (inPath == "-t")
             {
-                obj = new FileFinder(inPath);
+                std::cout << "type -s to stop" << std::endl;
+                
+                char * command;
+                std::cin >> command;
+
+                if (command == "-s")
+                {
+                    continue;
+                }
+
+                CommandsAnalyser obj;
+                obj.Run(command);
+                //obj = new FileFinder(inPath);
             }
 
-            obj->ReadAllFiles();
-            delete obj;            
+            /*boost::thread* pThread = new boost::thread(
+                &FileFinder::ReadAllFiles,      // pointer to member function to execute in thread
+                obj);       */ // pointer to instance of class
         }
         else
         {
             std::cout << "waiting" << std::endl;
             sleep(1);
         }
-
-        
-        
     }
-
+    delete obj;
+    
+    std::cout << "finish" << std::endl;
+    
     return 0;
 }
